@@ -141,7 +141,7 @@ def search():
                     GROUP BY realisation_id
                    )
                 SELECT formula, language, string_agg(CONCAT(realisation, '\n', full_gloss, '\n', 
-                lemmatized, '\n\n', examples), '+'), type, primary_sem, add_sem, intonation, 
+                lemmatized, '\n\n', examples), '+'), type, primary_sem, string_agg(add_sem, ' | '), intonation, 
                 construction, construction_syntax, sc_intonation, structure, speech_act, speech_act_1
                 FROM realisations
                 JOIN found_formulas
@@ -153,7 +153,7 @@ def search():
                 LEFT JOIN source_constr ON realisations.source_constr_id = source_constr.сonstruction_id
                 LEFT JOIN sa ON realisations.realisation_id = sa.realisation_id
                 LEFT JOIN structures ON realisations.structure_id = structures.structure_id
-                GROUP BY language, formula, type, primary_sem, add_sem, intonation, construction,
+                GROUP BY language, formula, type, primary_sem, intonation, construction,
                 construction_syntax, sc_intonation, structure, speech_act, speech_act_1
                 """, (realisation,))
         else:
