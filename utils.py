@@ -32,8 +32,12 @@ def get_realisations(realisations):
         rn = '\n\n'.join([f'**{r}**' if i == 0 else r for i, r in enumerate(rn)])
         res_string = res_string + rn + '\n\n'
         examples.append(exmpl if exmpl else '')
-    examples = '\n\n**Examples:**\n\n' + '\n\n'.join(set(examples))
-    examples = examples.replace('{', '**').replace('}', '**')
+    examples = list(set(examples))
+    if len(examples) >= 1 and examples[0]:
+        examples = '\n\n**Examples:**\n\n' + '\n\n'.join(examples)
+        examples = examples.replace('{', '**').replace('}', '**')
+    else:
+        examples = None
     return res_string, examples
 
 
