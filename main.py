@@ -1,27 +1,5 @@
 import streamlit as st
-import psycopg2
-
-
-def connect_to_db():
-    """
-    Connect to database
-    """
-    conn = psycopg2.connect(dbname=st.secrets['DB_NAME'],
-                            user=st.secrets['DB_USER'],
-                            password=st.secrets['DB_PASS'],
-                            host=st.secrets['DB_HOST'])
-
-    c = conn.cursor()
-    return c
-
-
-def get_options(cur, table):
-    """
-    Get search options from db by property
-    """
-    query = f"""SELECT * FROM {table}"""
-    cur.execute(query)
-    return {key[0]: key[1] for key in cur.fetchall()}
+from utils import *
 
 
 def search():
@@ -116,10 +94,81 @@ def search():
     button = st.button('Search', key='1')
     if button == 1:
         st.subheader('Search Results:')
+        # exact formula search 
+        if realisation:
+            cur.execute("""
+                WITH found_formulas AS (
+                    SELECT formula_id, formula, language
+                    FROM formulas
+                    LEFT JOIN languages
+                    ON formulas.language_id = languages.language_id
+                    WHERE formula = %s
+                   ), inner_structs AS (
+                    SELECT realisation_id, CONCAT(inner_structure_type, ': ', inner_structure_subtype) AS type
+                    FROM realisation2inner_structure
+                    LEFT JOIN inner_structure_types
+                    ON realisation2inner_structure.inner_structure_type_id = inner_structure_types.inner_structure_type_id
+                    LEFT JOIN inner_structure_subtypes
+                    ON realisation2inner_structure.inner_structure_subtype_id = inner_structure_subtypes.inner_structure_subtype_id
+                    GROUP BY realisation_id, type
+                   ), full_lemmas AS (
+                    SELECT realisation_id, string_agg(lemma, ' ') AS lemmatized
+                    FROM realisation2lemma
+                    LEFT JOIN lemmas
+                    ON realisation2lemma.lemma_id = lemmas.lemma_id
+                    GROUP BY realisation_id
+                   ), full_sem AS (
+                    SELECT realisation_id, primary_sem, string_agg(additional_sem, ' | ') AS add_sem
+                    FROM semantics
+                    LEFT JOIN primary_semantics
+                    ON semantics.primary_sem_id = primary_semantics.primary_sem_id
+                    LEFT JOIN additional_semantics
+                    ON semantics.additional_sem_id = additional_semantics.additional_sem_id
+                    GROUP BY realisation_id, primary_sem
+                   ), source_constr AS (
+                    SELECT сonstruction_id, construction, construction_syntax, intonation AS sc_intonation
+                    FROM source_constructions
+                    LEFT JOIN intonations
+                    ON source_constructions.intonation_id = intonations.intonation_id
+                   ), sa AS (
+                    SELECT realisation_id, string_agg(speech_acts.speech_act, ' | ') AS speech_act,
+                    string_agg(speech_acts_1.speech_act, ' | ') AS speech_act_1
+                    FROM (SELECT * FROM speech_acts) AS speech_acts_1
+                    RIGHT JOIN realisation2speech_acts
+                    ON realisation2speech_acts.speech_act_1_id = speech_acts_1.speech_act_id
+                    LEFT JOIN speech_acts
+                    ON realisation2speech_acts.speech_act_id = speech_acts.speech_act_id
+                    GROUP BY realisation_id
+                   )
+                SELECT formula, language, string_agg(CONCAT(realisation, '\n', full_gloss, '\n', 
+                lemmatized, '\n\n', examples), '+'), type, primary_sem, add_sem, intonation, 
+                construction, construction_syntax, sc_intonation, structure, speech_act, speech_act_1
+                FROM realisations
+                JOIN found_formulas
+                ON realisations.formula_id = found_formulas.formula_id
+                LEFT JOIN inner_structs ON realisations.realisation_id = inner_structs.realisation_id
+                LEFT JOIN full_lemmas ON realisations.realisation_id = full_lemmas.realisation_id
+                LEFT JOIN full_sem ON realisations.realisation_id = full_sem.realisation_id
+                LEFT JOIN intonations ON realisations.intonation_id = intonations.intonation_id
+                LEFT JOIN source_constr ON realisations.source_constr_id = source_constr.сonstruction_id
+                LEFT JOIN sa ON realisations.realisation_id = sa.realisation_id
+                LEFT JOIN structures ON realisations.structure_id = structures.structure_id
+                GROUP BY language, formula, type, primary_sem, add_sem, intonation, construction,
+                construction_syntax, sc_intonation, structure, speech_act, speech_act_1
+                """, (realisation,))
+        else:
+            pass
+        results = cur.fetchall()
+        conn.close()
+        if results:
+            print_results(results)
+        else:
+            st.text('Nothing found :(')
 
 
 def main():
     search()
 
+    
 if __name__ == '__main__':
     main()
