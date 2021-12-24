@@ -301,7 +301,13 @@ def search():
         results = cur.fetchall()
         conn.close()
         if results:
-            print_results(results)
+            if len(results) > 10:
+                print_results(results[:10])
+                show_more = st.button('Show More')
+                if show_more == 1:
+                    print_results(results[10:])
+            else:
+                print_results(results)
         else:
             st.text('Nothing found :(')
     else:
