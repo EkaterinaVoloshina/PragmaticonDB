@@ -81,7 +81,8 @@ def search():
             options=sorted(options.values())
         )
 
-    sort_by = st.radio('Sort by', ['language', 'variants'])
+    sort_by = st.radio('Sort by', ['language', 'variants']) 
+    result_number = st.slider('Number of results', 1, 100)
     button = st.button('Search', key='1')
 
     button2 = None
@@ -89,7 +90,7 @@ def search():
         placeholder_sql = """SELECT * FROM realisations 
         JOIN intonations using(intonation_id) 
         WHERE intonations.intonation='statement'"""
-        own_query = st.text_area(label='Own SQL query:')
+        own_query = st.text_area(label='Custom SQL query:')
                                  #placeholder=placeholder_sql)
         button2 = st.button('Execute', key='2')
     if button == 1:
@@ -301,13 +302,7 @@ def search():
         results = cur.fetchall()
         conn.close()
         if results:
-            if len(results) > 10:
-                print_results(results[:10])
-                show_more = st.button('Show More')
-                if show_more == 1:
-                    print_results(results[10:])
-            else:
-                print_results(results)
+            print_results(results[:result_number])
         else:
             st.text('Nothing found :(')
     else:
