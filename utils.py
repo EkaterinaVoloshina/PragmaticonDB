@@ -1,5 +1,6 @@
 import psycopg2
 import streamlit as st
+import pandas as pd
 
 
 def connect_to_db():
