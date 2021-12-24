@@ -1,1 +1,1 @@
-psycopg2 @ file:///C:/ci/psycopg2_1612298803839/work
+psycopg2 == 2.8.6
