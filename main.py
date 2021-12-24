@@ -251,7 +251,7 @@ def search():
                             ON realisation2speech_acts.speech_act_id = speech_acts.speech_act_id
                             GROUP BY realisation_id, speech_acts.speech_act),
                         lemmas AS(
-                            SELECT realisation_id, string_agg(lemma, ' ') AS lemmatized
+                            SELECT realisation_id, lemma
                             FROM realisation2lemma
                             LEFT JOIN lemmas using(lemma_id)),
                         formulas AS(
