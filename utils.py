@@ -76,4 +76,8 @@ def print_results(results):
             st.code(f"""{speech_acts}""")
         if variants:
             st.markdown(f"""Variants:\n\n{variants}""")
-        st.markdown(f"""---""")
+        st.markdown(f"""---""")  
+        
+
+def own_query_results(results):
+    return pd.DataFrame(results)
