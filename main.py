@@ -208,7 +208,8 @@ def search():
                         LEFT JOIN source_constr
                         ON realisations.source_constr_id = source_constr.сonstruction_id
                         LEFT JOIN structures using(structure_id)
-                        WHERE (%(inner_structure_type)s='{}' OR inner_structure_type=ANY(%(inner_structure_type)s))
+                        WHERE (%(glosses)s='{}' OR gloss=ANY(%(glosses)s))
+                        AND (%(inner_structure_type)s='{}' OR inner_structure_type=ANY(%(inner_structure_type)s))
                         AND (%(inner_structure_subtype)s='{}' OR inner_structure_subtype=ANY(%(inner_structure_subtype)s))
                         AND (%(primary_sem)s='{}' OR primary_sem=ANY(%(primary_sem)s))
                         AND (%(add_sem)s='{}' OR additional_sem=ANY(%(add_sem)s))
@@ -229,11 +230,9 @@ def search():
         else:
             cur.execute("""WITH glosses
                         AS(
-                            SELECT realisation_id
+                            SELECT realisation_id, gloss
                         FROM realisation2gloss
-                        LEFT JOIN glosses using(gloss_id)
-                        WHERE (%(glosses)s='{}' OR gloss=ANY(%(glosses)s))
-                        GROUP BY realisation_id),
+                        LEFT JOIN glosses using(gloss_id)),
                         inner_structure AS(SELECT realisation_id, inner_structure_type, inner_structure_subtype
                         FROM realisation2inner_structure
                         LEFT JOIN inner_structure_types using(inner_structure_type_id)
