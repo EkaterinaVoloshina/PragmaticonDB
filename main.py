@@ -182,11 +182,9 @@ def search():
                             ON realisation2speech_acts.speech_act_id = speech_acts.speech_act_id
                             GROUP BY realisation_id, speech_acts.speech_act),
                         lemmas AS(
-                            SELECT realisation_id, string_agg(lemma, ' ') AS lemmatized
+                            SELECT realisation_id, lemma
                             FROM realisation2lemma
-                            LEFT JOIN lemmas using(lemma_id)
-                            WHERE (%(lemmas)s='{}' OR lemma=ANY(%(lemmas)s))
-                            GROUP BY realisation_id),
+                            LEFT JOIN lemmas using(lemma_id)),
                         formulas AS(
                             SELECT formula_id, formula, language
                             FROM formulas
@@ -209,6 +207,7 @@ def search():
                         ON realisations.source_constr_id = source_constr.сonstruction_id
                         LEFT JOIN structures using(structure_id)
                         WHERE (%(glosses)s='{}' OR gloss=ANY(%(glosses)s))
+                        AND (%(lemmas)s='{}' OR lemma=ANY(%(lemmas)s))
                         AND (%(inner_structure_type)s='{}' OR inner_structure_type=ANY(%(inner_structure_type)s))
                         AND (%(inner_structure_subtype)s='{}' OR inner_structure_subtype=ANY(%(inner_structure_subtype)s))
                         AND (%(primary_sem)s='{}' OR primary_sem=ANY(%(primary_sem)s))
@@ -254,9 +253,7 @@ def search():
                         lemmas AS(
                             SELECT realisation_id, string_agg(lemma, ' ') AS lemmatized
                             FROM realisation2lemma
-                            LEFT JOIN lemmas using(lemma_id)
-                            WHERE (%(lemmas)s='{}' OR lemma=ANY(%(lemmas)s))
-                            GROUP BY realisation_id),
+                            LEFT JOIN lemmas using(lemma_id)),
                         formulas AS(
                             SELECT formula_id, formula, language
                             FROM formulas
@@ -279,6 +276,7 @@ def search():
                         ON realisations.source_constr_id = source_constr.сonstruction_id
                         LEFT JOIN structures using(structure_id)
                         WHERE (%(glosses)s='{}' OR gloss=ANY(%(glosses)s))
+                        AND (%(lemmas)s='{}' OR lemma=ANY(%(lemmas)s))
                         AND (%(inner_structure_type)s='{}' OR inner_structure_type=ANY(%(inner_structure_type)s))
                         AND (%(inner_structure_subtype)s='{}' OR inner_structure_subtype=ANY(%(inner_structure_subtype)s))
                         AND (%(primary_sem)s='{}' OR primary_sem=ANY(%(primary_sem)s))
