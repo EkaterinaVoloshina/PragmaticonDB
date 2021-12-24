@@ -44,12 +44,13 @@ def get_realisations(realisations):
 
 def get_speech_acts(structure, sa, sa1, formula):
     out = ''
-    if structure == '2':
-        out += '👤 ' + sa + '\n👤 ' + formula
-    elif structure == '3':
+    if structure == '2' and sa and formula:
+        out += '👤 '  + sa + '\n👤 ' + formula
+    elif structure == '3' and sa and sa1:
         for act in [sa1, sa, formula]:
             out += '👤 ' + act + '\n'
     return out
+
 
 
 def print_results(results):
