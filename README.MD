@@ -1,4 +1,4 @@
-## Brand New Nultilingual Pragmaticon!
+## Brand New Multilingual Pragmaticon!
 
 Link: https://share.streamlit.io/ekaterinavoloshina/pragmaticondb/main/main.py
 
