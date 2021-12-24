@@ -12,7 +12,6 @@ Link: https://share.streamlit.io/ekaterinavoloshina/pragmaticondb/main/main.py
 
 ## Example Queries:
 
-
 ```
 SELECT *
 FROM realisations
@@ -143,3 +142,7 @@ SELECT * FROM realisations WHERE realisation = 'hur det'
 ```
 DELETE FROM languages WHERE language = 'sv'
 ```
+
+## Scheme
+
+![img](https://github.com/EkaterinaVoloshina/PragmaticonDB/blob/main/db_scheme.png)
