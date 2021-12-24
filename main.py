@@ -193,7 +193,7 @@ def search():
                             SELECT сonstruction_id, construction, construction_syntax, intonation
                             FROM source_constructions
                             LEFT JOIN intonations using(intonation_id))
-                        SELECT formula, language, string_agg(CONCAT(realisation, '\n', full_gloss, '\n', lemmatized, '\n\n', examples),
+                        SELECT formula, language, string_agg(CONCAT(realisation, '\n', full_gloss, '\n', lemma, '\n\n', examples),
                                                       '+') AS variant, inner_structure_type, primary_sem, string_agg(additional_sem, ' | '), intonation,
                         construction, construction_syntax, structure, speech_act, speech_act_1
                         FROM realisations
@@ -262,7 +262,7 @@ def search():
                             SELECT сonstruction_id, construction, construction_syntax, intonation
                             FROM source_constructions
                             LEFT JOIN intonations using(intonation_id))
-                        SELECT formula, language, string_agg(CONCAT(realisation, '\n', full_gloss, '\n', lemmatized, '\n\n', examples),
+                        SELECT formula, language, string_agg(CONCAT(realisation, '\n', full_gloss, '\n', lemma, '\n\n', examples),
                                                       '+') AS variant, inner_structure_type, primary_sem, string_agg(additional_sem, ' | '), intonation,
                         construction, construction_syntax, structure, speech_act, speech_act_1
                         FROM realisations
@@ -294,7 +294,7 @@ def search():
                                                'primary_sem': primary_sem,
                                                'add_sem': add_sem, 'languages': languages,
                                                'constr_syntax': constr_syntax, 'speech_act': speech_act,
-                                               'structure': structure, 'intonations': intonations, })
+                                               'structure': structure, 'intonations': intonations,})
         results = cur.fetchall()
         conn.close()
         if results:
