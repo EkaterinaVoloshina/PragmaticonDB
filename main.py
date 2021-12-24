@@ -92,6 +92,15 @@ def search():
                 format_func=lambda x: options[x]
             )
     button = st.button('Search', key='1')
+    
+    button2 = None
+    if not realisation:
+        placeholder_sql = """SELECT * FROM realisations 
+JOIN intonations using(intonation_id) 
+WHERE intonations.intonation='statement'"""
+        own_query = st.text_area(label='Own SQL query:',
+                                 placeholder=placeholder_sql)
+        button2 = st.button('Execute', key='2')
     if button == 1:
         st.subheader('Search Results:')
         # exact formula search 
@@ -157,15 +166,30 @@ def search():
                 construction_syntax, sc_intonation, structure, speech_act, speech_act_1
                 """, (realisation,))
         else:
-            pass
+            ###########################
+            #   TO DO: MAIN SEARCH    # 
+            ###########################
         results = cur.fetchall()
         conn.close()
         if results:
             print_results(results)
         else:
             st.text('Nothing found :(')
+    else:
+    if button2 == 1:
+        if 'select' in own_query.lower():
+            cur.execute(own_query)
+            results = cur.fetchall()
+            st.dataframe(data=own_query_results(results))
+        else:
+            try:
+                cur.execute(own_query)
+                st.text("Query Succeeded")
+            except:
+                st.text("Query Failed :(")
+            conn.commit()
 
-
+            
 def main():
     search()
 
