@@ -1,3 +1,15 @@
+## Brand New Nultilingual Pragmaticon!
+
+Link: https://share.streamlit.io/ekaterinavoloshina/pragmaticondb/main/main.py
+
+## Search Variables:
+- `Word` -- exact match search, other functions not allowed when chosen
+- `Lemmas` -- allows to choose what lemmas should be present in the formula
+- `Glosses` -- multi-select search 
+-  Semantics: `pragmatics`, `additional semantics`, `inner structure`, etc.
+- `Speech acts` -- type of the speech acts
+- `Language`
+
 ## Example Queries:
 
 
