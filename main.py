@@ -22,36 +22,31 @@ def search():
             options = get_options(cur, 'primary_semantics')
             primary_sem = st.multiselect(
                 label='Pragmatics',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
         with col2:
             options = get_options(cur, 'additional_semantics')
             add_sem = st.multiselect(
                 label='Additional semantics',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
         options = get_options(cur, 'lemmas')
         lemmas = st.multiselect(
             label='Lemma',
-            options=options.values(),
-            #format_func=lambda x: options[x]
+            options=sorted(options.values())
         )
         col1, col2 = st.columns([5, 5])
         with col1:
             options = get_options(cur, 'glosses')
             glosses = st.multiselect(
                 label='Glosses',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
         with col2:
             options = get_options(cur, 'languages')
             languages = st.multiselect(
                 label='Language',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
         constr_syntax = st.text_input(
             label='Syntactic Structure',
@@ -62,33 +57,28 @@ def search():
             options = get_options(cur, 'inner_structure_types')
             inner_structure_type = st.multiselect(
                 label='Inner Structure',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
             options = get_options(cur, 'structures')
             structure = st.multiselect(
                 label='Structure',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
         with col2:
             options = get_options(cur, 'inner_structure_subtypes')
             inner_structure_subtype = st.multiselect(
                 label='Inner Structure Subtype',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
             options = get_options(cur, 'speech_acts')
             speech_act = st.multiselect(
                 label='Speech Act',
-                options=options.values(),
-                #format_func=lambda x: options[x]
+                options=sorted(options.values())
             )
         options = get_options(cur, 'intonations')
         intonations = st.multiselect(
             label='Intonation',
-            options=options.values(),
-            #format_func=lambda x: options[x]
+            options=sorted(options.values())
         )
 
     sort_by = st.radio('Sort by', ['language', 'variants'])
